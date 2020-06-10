@@ -1,0 +1,92 @@
+#%RAML 1.0
+title: Employee-Service-API
+version: 1.2
+baseUri: http://employee-service.com/api/{version}
+mediaType: 
+  - application/json
+types:
+  employee:
+    properties:
+      id: integer
+      name: string
+      age?: integer
+      role?: string
+  error:
+    properties:
+      code: integer
+      message: string
+
+/employee:
+  get:
+    description: List all employees matching query criteria if given else will list all employees
+    queryParameters:
+      name?: string
+      role?: string
+    responses:
+      200:
+        body:
+          application/json:
+            type: employee[]
+            examples:
+              output: !include examples/getOutput.json 
+              
+  post:
+    description: Create a new employee record
+    body:
+      application/json:
+        type: employee
+        examples:
+         input: !include examples/postInput.json
+
+    responses:
+      201:
+        body:
+          application/json:
+            type: object
+            example:
+              {"message" : "employee record successfully created"}
+
+  /{id}:
+    get:
+      description: Get an employee by id
+      responses:
+        200:
+          body:
+            application/json:
+              type: employee
+              examples:
+                output: !include examples/WithoutID.json
+                
+    put:
+      description: update an employee by id
+      responses:
+        200:
+          body:
+            application/json:
+              type: object
+              example:
+                {"message" : "employee successfully updated"}
+    delete:
+      description: delete an employee by id
+      responses:
+        200:
+          body:
+            application/json:
+              type: object
+              example:
+                {"message" : "employee successfully deleted"}
+        404:
+          body:
+            application/json:
+              type: error
+              example:
+                {"message" : "id is not found","code": 1000}
+
+      
+
+              
+              
+              
+      
+            
+      
